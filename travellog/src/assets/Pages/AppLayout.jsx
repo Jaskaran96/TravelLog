@@ -1,4 +1,4 @@
-import AppNavbar from "../Components/AppNavbar";
+import AppNavbar from "../Components/AppNav";
 export default function AppLayout() {
   return (
     <div>

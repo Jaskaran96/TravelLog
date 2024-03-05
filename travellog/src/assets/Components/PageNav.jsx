@@ -1,14 +1,16 @@
 import { NavLink } from "react-router-dom";
-import styles from "./NavBar.module.css";
-console.log(styles.nav);
+import styles from "./PageNav.module.css";
+import Logo from "./Logo";
 const info = [
   ["/", "Home"],
   ["/product", "Product"],
   ["/pricing", "Pricing"],
+  ["/login", "Login"],
 ];
 export default function NavBar() {
   return (
     <nav className={styles.nav}>
+      <Logo />
       <ul>
         <ListItem />
       </ul>
