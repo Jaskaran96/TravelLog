@@ -10,64 +10,33 @@ import CountryList from "./assets/Components/CountryList";
 import Form from "./assets/Components/Form";
 import City from "./assets/Components/City";
 import { useEffect, useState } from "react";
+import { CitiesProvider } from "./assets/Contexts/CitiesContext";
+import { AuthProvider } from "./assets/Contexts/FakeAuthContext";
 import "./index.css";
 
 function App() {
-  const [cities, setCities] = useState([]);
-  function getCountries(mapObj) {
-    return Object.keys(mapObj).map((key) => [key, mapObj[key]]);
-  }
-  const countries = getCountries(
-    cities.reduce((obj, value) => {
-      obj[value.country] = value.emoji;
-      return obj;
-    }, {})
-  );
-
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    setIsLoading(true);
-    fetch("http://localhost:9000/cities")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("GOT IT");
-        setCities(data);
-      })
-      .catch((err) => {
-        throw new Error(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="product" element={<Product />} />
-        <Route path="pricing" element={<Pricing />} />
-        <Route path="login" element={<Login />} />
-        <Route path="app" element={<AppLayout />}>
-          <Route
-            index
-            element={<CityList cities={cities} isLoading={isLoading} />}
-          />
-          <Route
-            path="cities"
-            element={<CityList cities={cities} isLoading={isLoading} />}
-          />
-          <Route path="cities/:cityID" element={<City />} />
-          <Route
-            path="countries"
-            element={
-              <CountryList countries={countries} isLoading={isLoading} />
-            }
-          />
-          <Route path="form" element={<Form />} />
-        </Route>
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <CitiesProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="product" element={<Product />} />
+            <Route path="pricing" element={<Pricing />} />
+
+            <Route path="login" element={<Login />} />
+            <Route path="app" element={<AppLayout />}>
+              <Route index element={<CityList />} />
+              <Route path="cities" element={<CityList />} />
+              <Route path="cities/:cityID" element={<City />} />
+              <Route path="countries" element={<CountryList />} />
+              <Route path="form" element={<Form />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </CitiesProvider>
   );
 }
 

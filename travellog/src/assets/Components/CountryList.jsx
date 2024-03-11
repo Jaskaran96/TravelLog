@@ -2,8 +2,22 @@ import styles from "./CountryList.module.css";
 import styles2 from "./CountryItem.module.css";
 import Spinner from "./Spinner";
 import Message from "./Message";
-export default function CityList({ countries, isLoading }) {
+import { useCities } from "../Contexts/CitiesContext";
+function getCountries(mapObj) {
+  return Object.keys(mapObj).map((key) => [key, mapObj[key]]);
+}
+
+export default function CityList() {
+  const { cities, isLoading } = useCities();
   if (isLoading) return <Spinner />;
+
+  const countries = getCountries(
+    cities.reduce((obj, value) => {
+      obj[value.country] = value.emoji;
+      return obj;
+    }, {})
+  );
+
   if (!countries.length)
     return <Message message="Add a country by clicking on the map" />;
   return (
